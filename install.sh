@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-VERSION="latest"
 REPO="momo2029/tinyclaw-site"
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -18,7 +17,7 @@ case "$OS" in
 esac
 
 BINARY="tinyclaw-$PLATFORM"
-URL="https://github.com/$REPO/releases/$VERSION/download/$BINARY"
+URL="https://github.com/$REPO/releases/latest/download/$BINARY"
 
 echo "Downloading TinyClaw for $BINARY..."
 curl -fsSL -o tinyclaw "$URL"
