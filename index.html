@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TinyClaw - Lightweight Local AI Assistant</title>
-    <meta name="description" content="A lightweight personal assistant built with Rust. Runs on a Raspberry Pi. Manages email, AI chat, and extensible skills. 1.7MB binary, 30MB RAM.">
+    <title>TinyClaw - 轻量级本地 AI 助手</title>
+    <meta name="description" content="用 Rust 构建的轻量级个人助手。运行在树莓派上。管理邮件、AI 对话、可扩展技能。仅 1.7MB，占用 30MB 内存。">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -30,7 +30,7 @@
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -85,6 +85,19 @@
             transition: opacity 0.2s !important;
         }
         .nav-cta:hover { opacity: 0.85; }
+
+        .lang-switch {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .lang-switch:hover { color: var(--text); border-color: #3f3f46; }
 
         /* ---- HERO ---- */
         .hero {
@@ -616,12 +629,13 @@
         TinyClaw
     </a>
     <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#performance">Performance</a>
-        <a href="#skills">Skills</a>
-        <a href="#testimonials">Community</a>
-        <a href="https://github.com/momo2029/tinyclaw" target="_blank">GitHub</a>
-        <a href="https://github.com/momo2029/tinyclaw/releases" class="nav-cta">Download</a>
+        <a href="#features" data-zh="功能" data-en="Features">功能</a>
+        <a href="#performance" data-zh="性能" data-en="Performance">性能</a>
+        <a href="#skills" data-zh="技能" data-en="Skills">技能</a>
+        <a href="#testimonials" data-zh="评价" data-en="Reviews">评价</a>
+        <a href="https://github.com/momo2029/tinyclaw-site" target="_blank">GitHub</a>
+        <a href="https://github.com/momo2029/tinyclaw-site/releases" class="nav-cta" data-zh="下载" data-en="Download">下载</a>
+        <button class="lang-switch" onclick="toggleLang()">EN</button>
     </div>
 </nav>
 
@@ -629,36 +643,36 @@
 <section class="hero">
     <div class="hero-badge">
         <span class="dot"></span>
-        v0.1.0 &mdash; Open Source &middot; MIT License
+        <span data-zh="v0.1.0 · 免费下载" data-en="v0.1.0 · Free Download">v0.1.0 · 免费下载</span>
     </div>
-    <h1>Your AI assistant.<br><span class="gradient">One binary. No cloud.</span></h1>
-    <p>A lightweight personal assistant built with Rust. Manages email, runs AI chat, and extends with skills &mdash; all locally, in under 50MB of RAM.</p>
+    <h1 data-zh='你的 AI 助手。<br><span class="gradient">一个二进制文件。无需云端。</span>' data-en='Your AI assistant.<br><span class="gradient">One binary. No cloud.</span>'>你的 AI 助手。<br><span class="gradient">一个二进制文件。无需云端。</span></h1>
+    <p data-zh="用 Rust 构建的轻量级个人助手。管理邮件、运行 AI 对话、通过技能扩展——全部本地运行，内存占用不到 50MB。" data-en="A lightweight personal assistant built with Rust. Manages email, runs AI chat, and extends with skills — all locally, in under 50MB of RAM.">用 Rust 构建的轻量级个人助手。管理邮件、运行 AI 对话、通过技能扩展——全部本地运行，内存占用不到 50MB。</p>
     <div class="hero-actions">
-        <a href="https://github.com/momo2029/tinyclaw/releases" class="btn btn-primary">
+        <a href="https://github.com/momo2029/tinyclaw-site/releases" class="btn btn-primary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download
+            <span data-zh="免费下载" data-en="Free Download">免费下载</span>
         </a>
-        <a href="https://github.com/momo2029/tinyclaw" class="btn btn-secondary">
+        <a href="https://github.com/momo2029/tinyclaw-site" class="btn btn-secondary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            View on GitHub
+            <span data-zh="GitHub 仓库" data-en="GitHub Repo">GitHub 仓库</span>
         </a>
     </div>
     <div class="hero-stats">
         <div class="hero-stat">
             <div class="num">~1.7MB</div>
-            <div class="label">Binary Size</div>
+            <div class="label" data-zh="二进制大小" data-en="Binary Size">二进制大小</div>
         </div>
         <div class="hero-stat">
             <div class="num">~40MB</div>
-            <div class="label">Runtime RAM</div>
+            <div class="label" data-zh="运行内存" data-en="Runtime RAM">运行内存</div>
         </div>
         <div class="hero-stat">
             <div class="num">&lt;1s</div>
-            <div class="label">Startup Time</div>
+            <div class="label" data-zh="启动时间" data-en="Startup Time">启动时间</div>
         </div>
         <div class="hero-stat">
             <div class="num">Rust</div>
-            <div class="label">Zero GC</div>
+            <div class="label" data-zh="零 GC" data-en="Zero GC">零 GC</div>
         </div>
     </div>
 </section>
@@ -666,40 +680,40 @@
 <!-- FEATURES -->
 <section id="features">
     <div class="container">
-        <div class="section-label">Features</div>
-        <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
-        <p class="section-desc">TinyClaw runs on a single binary. No Docker, no Kubernetes, no cloud dependency. Just start it and go.</p>
+        <div class="section-label" data-zh="功能" data-en="Features">功能</div>
+        <h2 class="section-title" data-zh="你需要的一切。<br>多余的一个没有。" data-en="Everything you need.<br>Nothing you don't.">你需要的一切。<br>多余的一个没有。</h2>
+        <p class="section-desc" data-zh="TinyClaw 仅靠一个二进制文件运行。无需 Docker、Kubernetes 或云端依赖。启动即用。" data-en="TinyClaw runs on a single binary. No Docker, no Kubernetes, no cloud dependency. Just start it and go.">TinyClaw 仅靠一个二进制文件运行。无需 Docker、Kubernetes 或云端依赖。启动即用。</p>
 
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon fi-purple">✉️</div>
-                <h3>Multi-Account Email</h3>
-                <p>Connect unlimited IMAP accounts. Read, search, and send emails through SMTP. Works with Gmail, Outlook, and any IMAP provider.</p>
+                <h3 data-zh="多账户邮件管理" data-en="Multi-Account Email">多账户邮件管理</h3>
+                <p data-zh="连接无限个 IMAP 账户。通过 SMTP 读取、搜索和发送邮件。支持 Gmail、Outlook 及所有 IMAP 服务。" data-en="Connect unlimited IMAP accounts. Read, search, and send emails through SMTP. Works with Gmail, Outlook, and any IMAP provider.">连接无限个 IMAP 账户。通过 SMTP 读取、搜索和发送邮件。支持 Gmail、Outlook 及所有 IMAP 服务。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-cyan">💬</div>
-                <h3>AI Chat with Streaming</h3>
-                <p>Chat with multiple AI providers. Streaming responses, tool invocation, and the ability to switch providers on the fly.</p>
+                <h3 data-zh="AI 流式对话" data-en="AI Chat with Streaming">AI 流式对话</h3>
+                <p data-zh="支持多个 AI 提供商。流式响应、工具调用、随时切换模型。" data-en="Chat with multiple AI providers. Streaming responses, tool invocation, and the ability to switch providers on the fly.">支持多个 AI 提供商。流式响应、工具调用、随时切换模型。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-green">🔧</div>
-                <h3>Extensible Skill System</h3>
-                <p>OpenClaw-compatible skills. Drop a SKILL.md file and it just works. Skills are auto-injected into AI context for natural invocation.</p>
+                <h3 data-zh="可扩展技能系统" data-en="Extensible Skill System">可扩展技能系统</h3>
+                <p data-zh="兼容 OpenClaw 技能格式。放一个 SKILL.md 文件即可自动加载。技能自动注入 AI 上下文，自然语言调用。" data-en="OpenClaw-compatible skills. Drop a SKILL.md file and it just works. Skills are auto-injected into AI context for natural invocation.">兼容 OpenClaw 技能格式。放一个 SKILL.md 文件即可自动加载。技能自动注入 AI 上下文，自然语言调用。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-orange">🪶</div>
-                <h3>Feishu / Lark Bot</h3>
-                <p>WebSocket-based connection to Feishu. No public IP needed. Receive and reply to messages through your existing AI + tool chain.</p>
+                <h3 data-zh="飞书 / Lark 机器人" data-en="Feishu / Lark Bot">飞书 / Lark 机器人</h3>
+                <p data-zh="基于 WebSocket 连接飞书。无需公网 IP。通过现有 AI + 工具链接收和回复消息。" data-en="WebSocket-based connection to Feishu. No public IP needed. Receive and reply to messages through your existing AI + tool chain.">基于 WebSocket 连接飞书。无需公网 IP。通过现有 AI + 工具链接收和回复消息。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-pink">🌐</div>
-                <h3>Built-in Web UI</h3>
-                <p>Setup wizard, dashboard, chat interface, skill management, and settings &mdash; all served by the binary itself. Alpine.js + Tailwind.</p>
+                <h3 data-zh="内置 Web 界面" data-en="Built-in Web UI">内置 Web 界面</h3>
+                <p data-zh="配置向导、仪表盘、聊天界面、技能管理和设置——全部由二进制文件自身提供。Alpine.js + Tailwind。" data-en="Setup wizard, dashboard, chat interface, skill management, and settings — all served by the binary itself. Alpine.js + Tailwind.">配置向导、仪表盘、聊天界面、技能管理和设置——全部由二进制文件自身提供。Alpine.js + Tailwind。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-purple">📦</div>
-                <h3>Runs Anywhere</h3>
-                <p>Raspberry Pi, old laptops, Android via Termux, low-end tablets. If it runs Linux/macOS/Windows, TinyClaw runs on it.</p>
+                <h3 data-zh="随处可运行" data-en="Runs Anywhere">随处可运行</h3>
+                <p data-zh="树莓派、旧笔记本、Android 通过 Termux、低端平板。只要支持 Linux/macOS/Windows，TinyClaw 就能运行。" data-en="Raspberry Pi, old laptops, Android via Termux, low-end tablets. If it runs Linux/macOS/Windows, TinyClaw runs on it.">树莓派、旧笔记本、Android 通过 Termux、低端平板。只要支持 Linux/macOS/Windows，TinyClaw 就能运行。</p>
             </div>
         </div>
     </div>
@@ -708,26 +722,26 @@
 <!-- PERFORMANCE -->
 <section id="performance" class="perf">
     <div class="container">
-        <div class="section-label">Performance</div>
-        <h2 class="section-title">Built for the edge.<br>Runs on a potato.</h2>
-        <p class="section-desc">Written in Rust with zero garbage collection overhead. Every byte counts.</p>
+        <div class="section-label" data-zh="性能" data-en="Performance">性能</div>
+        <h2 class="section-title" data-zh="为极限而生。<br>土豆也能跑。" data-en="Built for the edge.<br>Runs on a potato.">为极限而生。<br>土豆也能跑。</h2>
+        <p class="section-desc" data-zh="用 Rust 编写，零垃圾回收开销。每一字节都精打细算。" data-en="Written in Rust with zero garbage collection overhead. Every byte counts.">用 Rust 编写，零垃圾回收开销。每一字节都精打细算。</p>
 
         <div class="perf-grid">
             <div class="perf-bars">
                 <div class="perf-item">
-                    <label>Binary Size <span>1.7 MB</span></label>
+                    <label data-zh="二进制大小" data-en="Binary Size">二进制大小</label>
                     <div class="perf-bar"><div class="perf-bar-fill pb-accent" style="width: 8%"></div></div>
                 </div>
                 <div class="perf-item">
-                    <label>Memory Usage <span>~40 MB</span></label>
+                    <label data-zh="内存占用" data-en="Memory Usage">内存占用</label>
                     <div class="perf-bar"><div class="perf-bar-fill pb-green" style="width: 12%"></div></div>
                 </div>
                 <div class="perf-item">
-                    <label>Startup Time <span>&lt; 1 second</span></label>
+                    <label data-zh="启动时间" data-en="Startup Time">启动时间</label>
                     <div class="perf-bar"><div class="perf-bar-fill pb-orange" style="width: 5%"></div></div>
                 </div>
                 <div class="perf-item">
-                    <label>Dependencies <span>Zero external services</span></label>
+                    <label data-zh="外部依赖" data-en="Dependencies">外部依赖</label>
                     <div class="perf-bar"><div class="perf-bar-fill pb-accent" style="width: 3%"></div></div>
                 </div>
             </div>
@@ -739,15 +753,15 @@
                     <span style="margin-left: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">terminal</span>
                 </div>
                 <div class="perf-terminal-body">
-                    <span class="comment"># Build from source</span><br>
+                    <span class="comment" data-zh="# 从源码编译" data-en="# Build from source"># 从源码编译</span><br>
                     <span class="cmd">$</span> cargo build --release<br><br>
-                    <span class="comment"># That's it. One binary.</span><br>
+                    <span class="comment" data-zh="# 就这样。一个二进制文件。" data-en="# That's it. One binary."># 就这样。一个二进制文件。</span><br>
                     <span class="cmd">$</span> ls -lh target/release/tinyclaw<br>
                     <span class="val">-rwxr-xr-x  1.7M  tinyclaw</span><br><br>
-                    <span class="comment"># Run it</span><br>
+                    <span class="comment" data-zh="# 运行" data-en="# Run it"># 运行</span><br>
                     <span class="cmd">$</span> ./tinyclaw<br>
                     <span class="val">🦀 TinyClaw running on http://localhost:3000</span><br><br>
-                    <span class="comment"># Memory footprint</span><br>
+                    <span class="comment" data-zh="# 内存占用" data-en="# Memory footprint"># 内存占用</span><br>
                     <span class="cmd">$</span> ps -o rss= -p $(pgrep tinyclaw)<br>
                     <span class="val">  40960    # ~40MB</span>
                 </div>
@@ -759,9 +773,9 @@
 <!-- SKILLS -->
 <section id="skills" class="skills">
     <div class="container">
-        <div class="section-label">Skill System</div>
-        <h2 class="section-title">Extend with a single file.</h2>
-        <p class="section-desc">Drop a SKILL.md into the skills folder. TinyClaw loads it, injects it into AI context, and it's ready to use. No compilation, no restart.</p>
+        <div class="section-label" data-zh="技能系统" data-en="Skill System">技能系统</div>
+        <h2 class="section-title" data-zh="一个文件就能扩展。" data-en="Extend with a single file.">一个文件就能扩展。</h2>
+        <p class="section-desc" data-zh="放一个 SKILL.md 到技能文件夹。TinyClaw 自动加载、注入 AI 上下文，即刻可用。无需编译，无需重启。" data-en="Drop a SKILL.md into the skills folder. TinyClaw loads it, injects it into AI context, and it's ready to use. No compilation, no restart.">放一个 SKILL.md 到技能文件夹。TinyClaw 自动加载、注入 AI 上下文，即刻可用。无需编译，无需重启。</p>
 
         <div class="skills-flow">
             <div class="skill-node">
@@ -776,19 +790,19 @@
             <span class="skill-arrow">→</span>
             <div class="skill-node">
                 <span class="icon">✉️</span>
-                Email
+                <span data-zh="邮件" data-en="Email">邮件</span>
             </div>
             <div class="skill-node">
                 <span class="icon">📰</span>
-                News
+                <span data-zh="新闻" data-en="News">新闻</span>
             </div>
             <div class="skill-node">
                 <span class="icon">📅</span>
-                Calendar
+                <span data-zh="日历" data-en="Calendar">日历</span>
             </div>
             <div class="skill-node">
                 <span class="icon">🔮</span>
-                Yours
+                <span data-zh="你的" data-en="Yours">你的</span>
             </div>
         </div>
     </div>
@@ -797,74 +811,74 @@
 <!-- TESTIMONIALS -->
 <section id="testimonials" class="testimonials">
     <div class="container">
-        <div class="section-label">Community</div>
-        <h2 class="section-title">Loved by developers<br>who value simplicity.</h2>
-        <p class="section-desc">Here's what early users and contributors are saying.</p>
+        <div class="section-label" data-zh="用户评价" data-en="Reviews">用户评价</div>
+        <h2 class="section-title" data-zh="被追求简洁的<br>开发者们喜爱。" data-en="Loved by developers<br>who value simplicity.">被追求简洁的<br>开发者们喜爱。</h2>
+        <p class="section-desc" data-zh="来看看早期用户和贡献者怎么说。" data-en="Here's what early users and contributors are saying.">来看看早期用户和贡献者怎么说。</p>
 
         <div class="testimonials-grid">
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"I installed TinyClaw on my Raspberry Pi 4 and it handles my 5 email accounts + AI chat while using less RAM than a single Chrome tab. This is what self-hosted should feel like."</blockquote>
+                <blockquote data-zh="我把 TinyClaw 装在了树莓派 4 上，它管理着我 5 个邮箱账户 + AI 聊天，内存占用比一个 Chrome 标签页还少。这才是自托管该有的样子。" data-en="I installed TinyClaw on my Raspberry Pi 4 and it handles my 5 email accounts + AI chat while using less RAM than a single Chrome tab. This is what self-hosted should feel like.">我把 TinyClaw 装在了树莓派 4 上，它管理着我 5 个邮箱账户 + AI 聊天，内存占用比一个 Chrome 标签页还少。这才是自托管该有的样子。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #6d5cff, #06b6d4);">AK</div>
                     <div>
                         <div class="testimonial-name">Alex K.</div>
-                        <div class="testimonial-role">DevOps Engineer &middot; Self-hosting enthusiast</div>
+                        <div class="testimonial-role" data-zh="DevOps 工程师 · 自托管爱好者" data-en="DevOps Engineer · Self-hosting enthusiast">DevOps 工程师 · 自托管爱好者</div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"The skill system is genius. I wrote a weather skill in 10 minutes &mdash; just a markdown file &mdash; and the AI immediately knew how to use it. No plugins, no npm install, no build step."</blockquote>
+                <blockquote data-zh="技能系统太天才了。我 10 分钟写了一个天气技能——就一个 markdown 文件——AI 立刻就知道怎么用。不需要插件，不需要 npm install，不需要编译。" data-en="The skill system is genius. I wrote a weather skill in 10 minutes — just a markdown file — and the AI immediately knew how to use it. No plugins, no npm install, no build step.">技能系统太天才了。我 10 分钟写了一个天气技能——就一个 markdown 文件——AI 立刻就知道怎么用。不需要插件，不需要 npm install，不需要编译。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #22c55e, #06b6d4);">SL</div>
                     <div>
                         <div class="testimonial-name">Sarah L.</div>
-                        <div class="testimonial-role">Full-stack Developer &middot; Open source contributor</div>
+                        <div class="testimonial-role" data-zh="全栈开发者 · 开源贡献者" data-en="Full-stack Developer · Open source contributor">全栈开发者 · 开源贡献者</div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"Finally, an AI assistant that doesn't need a $20/month subscription and a cloud server. It runs on my old ThinkPad from 2015 and does everything I need for email management."</blockquote>
+                <blockquote data-zh="终于有一个不需要每月 20 美元订阅和云服务器的 AI 助手了。它跑在我 2015 年的旧 ThinkPad 上，邮件管理的所有需求都能满足。" data-en="Finally, an AI assistant that doesn't need a $20/month subscription and a cloud server. It runs on my old ThinkPad from 2015 and does everything I need for email management.">终于有一个不需要每月 20 美元订阅和云服务器的 AI 助手了。它跑在我 2015 年的旧 ThinkPad 上，邮件管理的所有需求都能满足。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #ec4899);">MR</div>
                     <div>
                         <div class="testimonial-name">Mike R.</div>
-                        <div class="testimonial-role">Product Manager &middot; Privacy advocate</div>
+                        <div class="testimonial-role" data-zh="产品经理 · 隐私倡导者" data-en="Product Manager · Privacy advocate">产品经理 · 隐私倡导者</div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"1.7MB binary. Let that sink in. My Node.js 'hello world' with dependencies is bigger. The Rust architecture is clean and the codebase is a joy to read. Contributing was surprisingly easy."</blockquote>
+                <blockquote data-zh="1.7MB 的二进制文件，好好感受一下。我带依赖的 Node.js 'hello world' 都比它大。Rust 架构很干净，代码读起来是一种享受。贡献代码出乎意料地简单。" data-en="1.7MB binary. Let that sink in. My Node.js 'hello world' with dependencies is bigger. The Rust architecture is clean and the codebase is a joy to read. Contributing was surprisingly easy.">1.7MB 的二进制文件，好好感受一下。我带依赖的 Node.js 'hello world' 都比它大。Rust 架构很干净，代码读起来是一种享受。贡献代码出乎意料地简单。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #ec4899, #6d5cff);">YZ</div>
                     <div>
                         <div class="testimonial-name">Yuki Z.</div>
-                        <div class="testimonial-role">Rust Developer &middot; Systems programmer</div>
+                        <div class="testimonial-role" data-zh="Rust 开发者 · 系统程序员" data-en="Rust Developer · Systems programmer">Rust 开发者 · 系统程序员</div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"We deployed TinyClaw on a TV box running Android via Termux. It manages our team's shared inbox and Feishu bot. The WebSocket connection means we don't need any public IP or tunneling."</blockquote>
+                <blockquote data-zh="我们把 TinyClaw 部署在运行 Android 的电视盒子上，通过 Termux 运行。它管理我们团队的共享收件箱和飞书机器人。WebSocket 连接意味着我们不需要任何公网 IP 或隧道。" data-en="We deployed TinyClaw on a TV box running Android via Termux. It manages our team's shared inbox and Feishu bot. The WebSocket connection means we don't need any public IP or tunneling.">我们把 TinyClaw 部署在运行 Android 的电视盒子上，通过 Termux 运行。它管理我们团队的共享收件箱和飞书机器人。WebSocket 连接意味着我们不需要任何公网 IP 或隧道。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #06b6d4, #22c55e);">JC</div>
                     <div>
                         <div class="testimonial-name">James C.</div>
-                        <div class="testimonial-role">CTO &middot; Small startup team</div>
+                        <div class="testimonial-role" data-zh="CTO · 创业小团队" data-en="CTO · Small startup team">CTO · 创业小团队</div>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-stars">★★★★★</div>
-                <blockquote>"I've tried every local AI assistant out there. Most are Electron apps eating 500MB+ of RAM. TinyClaw is the real deal &mdash; native, fast, and respects my hardware. The chat UI is beautiful too."</blockquote>
+                <blockquote data-zh="我试过所有本地 AI 助手。大多数是 Electron 应用，吃掉 500MB+ 内存。TinyClaw 才是真家伙——原生、快速、尊重我的硬件。聊天界面也很漂亮。" data-en="I've tried every local AI assistant out there. Most are Electron apps eating 500MB+ of RAM. TinyClaw is the real deal — native, fast, and respects my hardware. The chat UI is beautiful too.">我试过所有本地 AI 助手。大多数是 Electron 应用，吃掉 500MB+ 内存。TinyClaw 才是真家伙——原生、快速、尊重我的硬件。聊天界面也很漂亮。</blockquote>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #6d5cff);">DW</div>
                     <div>
                         <div class="testimonial-name">Diana W.</div>
-                        <div class="testimonial-role">Indie Hacker &middot; Minimalist developer</div>
+                        <div class="testimonial-role" data-zh="独立开发者 · 极简主义者" data-en="Indie Hacker · Minimalist developer">独立开发者 · 极简主义者</div>
                     </div>
                 </div>
             </div>
@@ -875,20 +889,20 @@
 <!-- CTA -->
 <section class="cta">
     <div class="container">
-        <h2>Ready to go small?</h2>
-        <p>One binary. No cloud. No subscriptions. Just your assistant, running locally.</p>
+        <h2 data-zh="准备好从小开始了？" data-en="Ready to go small?">准备好从小开始了？</h2>
+        <p data-zh="一个二进制文件。无需云端。无需订阅。你的助手，就在本地运行。" data-en="One binary. No cloud. No subscriptions. Just your assistant, running locally.">一个二进制文件。无需云端。无需订阅。你的助手，就在本地运行。</p>
         <div class="cta-actions">
-            <a href="https://github.com/momo2029/tinyclaw/releases" class="btn btn-primary">
+            <a href="https://github.com/momo2029/tinyclaw-site/releases" class="btn btn-primary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download Latest
+                <span data-zh="免费下载" data-en="Free Download">免费下载</span>
             </a>
-            <a href="https://github.com/momo2029/tinyclaw" class="btn btn-secondary">
+            <a href="https://github.com/momo2029/tinyclaw-site" class="btn btn-secondary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                Contribute
+                <span data-zh="GitHub 仓库" data-en="GitHub Repo">GitHub 仓库</span>
             </a>
         </div>
         <div class="code-block">
-            <span style="color: #52525b;"># Get started in 30 seconds</span><br>
+            <span style="color: #52525b;" data-zh="# 30 秒快速开始" data-en="# Get started in 30 seconds"># 30 秒快速开始</span><br>
             cargo install --git https://github.com/momo2029/tinyclaw && tinyclaw
         </div>
     </div>
@@ -897,15 +911,31 @@
 <!-- FOOTER -->
 <footer>
     <div class="footer-inner">
-        <div class="footer-copy">&copy; 2026 TinyClaw. MIT License.</div>
+        <div class="footer-copy">&copy; 2026 TinyClaw. <span data-zh="保留所有权利。" data-en="All rights reserved.">保留所有权利。</span></div>
         <div class="footer-links">
-            <a href="https://github.com/momo2029/tinyclaw">GitHub</a>
-            <a href="https://github.com/momo2029/tinyclaw/releases">Releases</a>
-            <a href="https://github.com/momo2029/tinyclaw/issues">Issues</a>
-            <a href="https://github.com/momo2029/tinyclaw/blob/main/README.md">Docs</a>
+            <a href="https://github.com/momo2029/tinyclaw-site">GitHub</a>
+            <a href="https://github.com/momo2029/tinyclaw-site/releases" data-zh="下载" data-en="Releases">下载</a>
+            <a href="https://github.com/momo2029/tinyclaw-site/issues" data-zh="问题反馈" data-en="Issues">问题反馈</a>
         </div>
     </div>
 </footer>
+
+<script>
+let currentLang = 'zh';
+
+function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    const html = document.documentElement;
+    html.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+    html.setAttribute('data-lang', currentLang);
+
+    document.querySelectorAll('[data-zh]').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + currentLang);
+    });
+
+    document.querySelector('.lang-switch').textContent = currentLang === 'zh' ? 'EN' : '中文';
+}
+</script>
 
 </body>
 </html>
