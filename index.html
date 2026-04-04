@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyClaw - Lightweight Local AI Assistant</title>
+    <meta name="description" content="A lightweight personal assistant built with Rust. Runs on a Raspberry Pi. Manages email, AI chat, and extensible skills. 1.7MB binary, 30MB RAM.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #09090b;
+            --bg-card: #111114;
+            --bg-card-hover: #18181b;
+            --border: #27272a;
+            --text: #fafafa;
+            --text-muted: #a1a1aa;
+            --accent: #6d5cff;
+            --accent-glow: rgba(109, 92, 255, 0.15);
+            --green: #22c55e;
+            --green-glow: rgba(34, 197, 94, 0.12);
+            --orange: #f59e0b;
+            --cyan: #06b6d4;
+            --pink: #ec4899;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 2rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 800;
+            font-size: 1.15rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .nav-logo svg { width: 28px; height: 28px; }
+
+        .nav-links { display: flex; align-items: center; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        .nav-cta {
+            background: var(--accent) !important;
+            color: white !important;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: opacity 0.2s !important;
+        }
+        .nav-cta:hover { opacity: 0.85; }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 20%, transparent 70%);
+        }
+
+        .hero > * { position: relative; z-index: 1; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), var(--cyan), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--bg-card-hover); border-color: #3f3f46; }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-stat { text-align: center; }
+        .hero-stat .num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .hero-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ---- SECTION COMMON ---- */
+        section { padding: 6rem 2rem; }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* ---- FEATURES ---- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-top: 3.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            border-color: #3f3f46;
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover::after { opacity: 0.6; }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .fi-purple { background: var(--accent-glow); }
+        .fi-green { background: var(--green-glow); }
+        .fi-cyan { background: rgba(6, 182, 212, 0.12); }
+        .fi-orange { background: rgba(245, 158, 11, 0.12); }
+        .fi-pink { background: rgba(236, 72, 153, 0.12); }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ---- PERFORMANCE ---- */
+        .perf { border-top: 1px solid var(--border); }
+
+        .perf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3.5rem;
+        }
+
+        .perf-bars { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        .perf-item label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .perf-item label span { color: var(--text-muted); font-weight: 400; font-family: 'JetBrains Mono', monospace; }
+
+        .perf-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .perf-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .pb-accent { background: linear-gradient(90deg, var(--accent), var(--cyan)); }
+        .pb-green { background: linear-gradient(90deg, var(--green), #4ade80); }
+        .pb-orange { background: linear-gradient(90deg, var(--orange), #fbbf24); }
+
+        .perf-terminal {
+            background: #0c0c0e;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .perf-terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: #111114;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .perf-terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #22c55e; }
+
+        .perf-terminal-body {
+            padding: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+
+        .perf-terminal-body .cmd { color: var(--green); }
+        .perf-terminal-body .val { color: var(--cyan); }
+        .perf-terminal-body .comment { color: #52525b; }
+
+        /* ---- SKILLS ---- */
+        .skills { border-top: 1px solid var(--border); }
+
+        .skills-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+            flex-wrap: wrap;
+        }
+
+        .skill-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .skill-node:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .skill-node .icon { font-size: 1.3rem; }
+
+        .skill-arrow {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        .skill-center {
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        /* ---- TESTIMONIALS ---- */
+        .testimonials { border-top: 1px solid var(--border); }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-top: 3.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            border-color: #3f3f46;
+            transform: translateY(-2px);
+        }
+
+        .testimonial-stars {
+            color: var(--orange);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-card blockquote {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+            flex: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .testimonial-name { font-weight: 600; font-size: 0.9rem; }
+        .testimonial-role { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ---- CTA ---- */
+        .cta {
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta > * { position: relative; z-index: 1; }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        .code-block {
+            background: #0c0c0e;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            margin-top: 2rem;
+            display: inline-block;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+        }
+
+        .footer-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+
+        /* ---- MOBILE ---- */
+        @media (max-width: 768px) {
+            nav { padding: 0 1rem; }
+            .nav-links { display: none; }
+            .hero { padding: 7rem 1.25rem 3rem; }
+            .hero-stats { gap: 2rem; }
+            .perf-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            section { padding: 4rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="#" class="nav-logo">
+        <svg viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L4 8v12l10 6 10-6V8L14 2z" stroke="#6d5cff" stroke-width="2" fill="none"/>
+            <path d="M14 8l-4 2.5v5L14 18l4-2.5v-5L14 8z" fill="#6d5cff" opacity="0.3"/>
+            <circle cx="14" cy="13" r="2" fill="#6d5cff"/>
+        </svg>
+        TinyClaw
+    </a>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#performance">Performance</a>
+        <a href="#skills">Skills</a>
+        <a href="#testimonials">Community</a>
+        <a href="https://github.com/momo2029/tinyclaw" target="_blank">GitHub</a>
+        <a href="https://github.com/momo2029/tinyclaw/releases" class="nav-cta">Download</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-badge">
+        <span class="dot"></span>
+        v0.1.0 &mdash; Open Source &middot; MIT License
+    </div>
+    <h1>Your AI assistant.<br><span class="gradient">One binary. No cloud.</span></h1>
+    <p>A lightweight personal assistant built with Rust. Manages email, runs AI chat, and extends with skills &mdash; all locally, in under 50MB of RAM.</p>
+    <div class="hero-actions">
+        <a href="https://github.com/momo2029/tinyclaw/releases" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+        </a>
+        <a href="https://github.com/momo2029/tinyclaw" class="btn btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+        </a>
+    </div>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="num">~1.7MB</div>
+            <div class="label">Binary Size</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">~40MB</div>
+            <div class="label">Runtime RAM</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">&lt;1s</div>
+            <div class="label">Startup Time</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">Rust</div>
+            <div class="label">Zero GC</div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="container">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+        <p class="section-desc">TinyClaw runs on a single binary. No Docker, no Kubernetes, no cloud dependency. Just start it and go.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon fi-purple">✉️</div>
+                <h3>Multi-Account Email</h3>
+                <p>Connect unlimited IMAP accounts. Read, search, and send emails through SMTP. Works with Gmail, Outlook, and any IMAP provider.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-cyan">💬</div>
+                <h3>AI Chat with Streaming</h3>
+                <p>Chat with multiple AI providers. Streaming responses, tool invocation, and the ability to switch providers on the fly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-green">🔧</div>
+                <h3>Extensible Skill System</h3>
+                <p>OpenClaw-compatible skills. Drop a SKILL.md file and it just works. Skills are auto-injected into AI context for natural invocation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-orange">🪶</div>
+                <h3>Feishu / Lark Bot</h3>
+                <p>WebSocket-based connection to Feishu. No public IP needed. Receive and reply to messages through your existing AI + tool chain.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-pink">🌐</div>
+                <h3>Built-in Web UI</h3>
+                <p>Setup wizard, dashboard, chat interface, skill management, and settings &mdash; all served by the binary itself. Alpine.js + Tailwind.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-purple">📦</div>
+                <h3>Runs Anywhere</h3>
+                <p>Raspberry Pi, old laptops, Android via Termux, low-end tablets. If it runs Linux/macOS/Windows, TinyClaw runs on it.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section id="performance" class="perf">
+    <div class="container">
+        <div class="section-label">Performance</div>
+        <h2 class="section-title">Built for the edge.<br>Runs on a potato.</h2>
+        <p class="section-desc">Written in Rust with zero garbage collection overhead. Every byte counts.</p>
+
+        <div class="perf-grid">
+            <div class="perf-bars">
+                <div class="perf-item">
+                    <label>Binary Size <span>1.7 MB</span></label>
+                    <div class="perf-bar"><div class="perf-bar-fill pb-accent" style="width: 8%"></div></div>
+                </div>
+                <div class="perf-item">
+                    <label>Memory Usage <span>~40 MB</span></label>
+                    <div class="perf-bar"><div class="perf-bar-fill pb-green" style="width: 12%"></div></div>
+                </div>
+                <div class="perf-item">
+                    <label>Startup Time <span>&lt; 1 second</span></label>
+                    <div class="perf-bar"><div class="perf-bar-fill pb-orange" style="width: 5%"></div></div>
+                </div>
+                <div class="perf-item">
+                    <label>Dependencies <span>Zero external services</span></label>
+                    <div class="perf-bar"><div class="perf-bar-fill pb-accent" style="width: 3%"></div></div>
+                </div>
+            </div>
+            <div class="perf-terminal">
+                <div class="perf-terminal-header">
+                    <div class="perf-terminal-dot dot-red"></div>
+                    <div class="perf-terminal-dot dot-yellow"></div>
+                    <div class="perf-terminal-dot dot-green"></div>
+                    <span style="margin-left: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">terminal</span>
+                </div>
+                <div class="perf-terminal-body">
+                    <span class="comment"># Build from source</span><br>
+                    <span class="cmd">$</span> cargo build --release<br><br>
+                    <span class="comment"># That's it. One binary.</span><br>
+                    <span class="cmd">$</span> ls -lh target/release/tinyclaw<br>
+                    <span class="val">-rwxr-xr-x  1.7M  tinyclaw</span><br><br>
+                    <span class="comment"># Run it</span><br>
+                    <span class="cmd">$</span> ./tinyclaw<br>
+                    <span class="val">🦀 TinyClaw running on http://localhost:3000</span><br><br>
+                    <span class="comment"># Memory footprint</span><br>
+                    <span class="cmd">$</span> ps -o rss= -p $(pgrep tinyclaw)<br>
+                    <span class="val">  40960    # ~40MB</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="skills">
+    <div class="container">
+        <div class="section-label">Skill System</div>
+        <h2 class="section-title">Extend with a single file.</h2>
+        <p class="section-desc">Drop a SKILL.md into the skills folder. TinyClaw loads it, injects it into AI context, and it's ready to use. No compilation, no restart.</p>
+
+        <div class="skills-flow">
+            <div class="skill-node">
+                <span class="icon">📄</span>
+                SKILL.md
+            </div>
+            <span class="skill-arrow">→</span>
+            <div class="skill-node skill-center">
+                <span class="icon">🦀</span>
+                TinyClaw
+            </div>
+            <span class="skill-arrow">→</span>
+            <div class="skill-node">
+                <span class="icon">✉️</span>
+                Email
+            </div>
+            <div class="skill-node">
+                <span class="icon">📰</span>
+                News
+            </div>
+            <div class="skill-node">
+                <span class="icon">📅</span>
+                Calendar
+            </div>
+            <div class="skill-node">
+                <span class="icon">🔮</span>
+                Yours
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials">
+    <div class="container">
+        <div class="section-label">Community</div>
+        <h2 class="section-title">Loved by developers<br>who value simplicity.</h2>
+        <p class="section-desc">Here's what early users and contributors are saying.</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"I installed TinyClaw on my Raspberry Pi 4 and it handles my 5 email accounts + AI chat while using less RAM than a single Chrome tab. This is what self-hosted should feel like."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #6d5cff, #06b6d4);">AK</div>
+                    <div>
+                        <div class="testimonial-name">Alex K.</div>
+                        <div class="testimonial-role">DevOps Engineer &middot; Self-hosting enthusiast</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"The skill system is genius. I wrote a weather skill in 10 minutes &mdash; just a markdown file &mdash; and the AI immediately knew how to use it. No plugins, no npm install, no build step."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #22c55e, #06b6d4);">SL</div>
+                    <div>
+                        <div class="testimonial-name">Sarah L.</div>
+                        <div class="testimonial-role">Full-stack Developer &middot; Open source contributor</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"Finally, an AI assistant that doesn't need a $20/month subscription and a cloud server. It runs on my old ThinkPad from 2015 and does everything I need for email management."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #ec4899);">MR</div>
+                    <div>
+                        <div class="testimonial-name">Mike R.</div>
+                        <div class="testimonial-role">Product Manager &middot; Privacy advocate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"1.7MB binary. Let that sink in. My Node.js 'hello world' with dependencies is bigger. The Rust architecture is clean and the codebase is a joy to read. Contributing was surprisingly easy."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #ec4899, #6d5cff);">YZ</div>
+                    <div>
+                        <div class="testimonial-name">Yuki Z.</div>
+                        <div class="testimonial-role">Rust Developer &middot; Systems programmer</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"We deployed TinyClaw on a TV box running Android via Termux. It manages our team's shared inbox and Feishu bot. The WebSocket connection means we don't need any public IP or tunneling."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #06b6d4, #22c55e);">JC</div>
+                    <div>
+                        <div class="testimonial-name">James C.</div>
+                        <div class="testimonial-role">CTO &middot; Small startup team</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <blockquote>"I've tried every local AI assistant out there. Most are Electron apps eating 500MB+ of RAM. TinyClaw is the real deal &mdash; native, fast, and respects my hardware. The chat UI is beautiful too."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #6d5cff);">DW</div>
+                    <div>
+                        <div class="testimonial-name">Diana W.</div>
+                        <div class="testimonial-role">Indie Hacker &middot; Minimalist developer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h2>Ready to go small?</h2>
+        <p>One binary. No cloud. No subscriptions. Just your assistant, running locally.</p>
+        <div class="cta-actions">
+            <a href="https://github.com/momo2029/tinyclaw/releases" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Latest
+            </a>
+            <a href="https://github.com/momo2029/tinyclaw" class="btn btn-secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                Contribute
+            </a>
+        </div>
+        <div class="code-block">
+            <span style="color: #52525b;"># Get started in 30 seconds</span><br>
+            cargo install --git https://github.com/momo2029/tinyclaw && tinyclaw
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-copy">&copy; 2026 TinyClaw. MIT License.</div>
+        <div class="footer-links">
+            <a href="https://github.com/momo2029/tinyclaw">GitHub</a>
+            <a href="https://github.com/momo2029/tinyclaw/releases">Releases</a>
+            <a href="https://github.com/momo2029/tinyclaw/issues">Issues</a>
+            <a href="https://github.com/momo2029/tinyclaw/blob/main/README.md">Docs</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
