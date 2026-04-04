@@ -27,4 +27,4 @@ chmod +x tinyclaw
 echo ""
 echo "TinyClaw downloaded successfully!"
 echo "Run it with: ./tinyclaw"
-echo "Then open: http://localhost:3000"
+echo "Then open: http://localhost:3198"

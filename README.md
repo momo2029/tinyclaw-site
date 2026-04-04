@@ -44,7 +44,7 @@ curl -fsSL https://tinyclaw.net/install.sh | sh
 # 2. Run it
 ./tinyclaw
 
-# 3. Open http://localhost:3000
+# 3. Open http://localhost:3198
 ```
 
 That's it. No Docker, no cloud, no config required to start.
