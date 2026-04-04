@@ -753,10 +753,10 @@
                     <span style="margin-left: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">terminal</span>
                 </div>
                 <div class="perf-terminal-body">
-                    <span class="comment" data-zh="# 从源码编译" data-en="# Build from source"># 从源码编译</span><br>
-                    <span class="cmd">$</span> cargo build --release<br><br>
-                    <span class="comment" data-zh="# 就这样。一个二进制文件。" data-en="# That's it. One binary."># 就这样。一个二进制文件。</span><br>
-                    <span class="cmd">$</span> ls -lh target/release/tinyclaw<br>
+                    <span class="comment" data-zh="# 下载" data-en="# Download"># 下载</span><br>
+                    <span class="cmd">$</span> curl -fsSL https://tinyclaw.net/install.sh | sh<br><br>
+                    <span class="comment" data-zh="# 一个二进制文件" data-en="# One binary"># 一个二进制文件</span><br>
+                    <span class="cmd">$</span> ls -lh tinyclaw<br>
                     <span class="val">-rwxr-xr-x  1.7M  tinyclaw</span><br><br>
                     <span class="comment" data-zh="# 运行" data-en="# Run it"># 运行</span><br>
                     <span class="cmd">$</span> ./tinyclaw<br>
@@ -902,7 +902,11 @@
             </a>
         </div>
         <div class="code-block">
-            <span style="color: #52525b;" data-zh="# 下载后直接运行" data-en="# Download and run directly"># 下载后直接运行</span><br>
+            <span style="color: #52525b;" data-zh="# macOS / Linux" data-en="# macOS / Linux"># macOS / Linux</span><br>
+            curl -fsSL https://tinyclaw.net/install.sh | sh<br><br>
+            <span style="color: #52525b;" data-zh="# Windows (PowerShell)" data-en="# Windows (PowerShell)"># Windows (PowerShell)</span><br>
+            powershell -Command "Invoke-WebRequest -Uri https://tinyclaw.net/install.ps1 -OutFile install.ps1; .\install.ps1"<br><br>
+            <span style="color: #52525b;" data-zh="# 或者下载后直接运行" data-en="# Or download and run directly"># 或者下载后直接运行</span><br>
             chmod +x tinyclaw && ./tinyclaw
         </div>
     </div>
