@@ -11,11 +11,13 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             name: tinyclaw-linux-x64
+            container: centos:7
           - os: macos-latest
             target: aarch64-apple-darwin
             name: tinyclaw-macos-arm64
@@ -27,8 +29,14 @@ jobs:
             name: tinyclaw-windows-x64.exe
 
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container || null }}
 
     steps:
+      - name: Install build tools (CentOS)
+        if: matrix.container != ''
+        run: |
+          yum install -y gcc make curl perl
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
