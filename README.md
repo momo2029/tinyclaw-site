@@ -10,12 +10,12 @@ A lightweight personal assistant built with Rust. Manages email, runs AI chat, a
 
 ### Pre-built Binaries
 
-| Platform | File |
-|----------|------|
-| macOS (Apple Silicon) | [Download](../../releases/latest) |
-| macOS (Intel) | [Download](../../releases/latest) |
-| Windows (x64) | [Download](../../releases/latest) |
-| Linux (x64) | [Download](../../releases/latest) |
+| Platform | File | Minimum OS |
+|----------|------|------------|
+| macOS (Apple Silicon) | [Download](../../releases/latest) | macOS 11+ |
+| macOS (Intel) | [Download](../../releases/latest) | macOS 11+ |
+| Windows (x64) | [Download](../../releases/latest) | Windows 10+ |
+| Linux (x64) | [Download](../../releases/latest) | glibc 2.31+ (Ubuntu 20.04+, Debian 11+) |
 
 All releases are published on the [Releases](../../releases) page.
 
@@ -31,11 +31,12 @@ curl -fsSL https://tinyclaw.net/install.sh | sh
 ## Features
 
 - **Multi-Account Email** — IMAP read + SMTP send across unlimited accounts
-- **AI Chat** — Streaming responses, multi-provider, tool invocation
+- **AI Chat** — Streaming responses, multi-provider, tool invocation. Built-in model works out of the box — no API key required
+- **RSS News** — Subscribe to feeds, auto-fetch unread articles, AI summarization
 - **Skill System** — OpenClaw-compatible, drop a `SKILL.md` and it works
 - **Feishu Bot** — WebSocket connection, no public IP needed
 - **Built-in Web UI** — Dashboard, chat, skills, settings
-- **~1.7MB Binary** — Runs on Raspberry Pi, old laptops, anything
+- **~12MB Binary** — Runs on Raspberry Pi, old laptops, anything
 
 ## Quick Start
 
@@ -53,7 +54,7 @@ That's it. No Docker, no cloud, no config required to start.
 
 | Metric | Value |
 |--------|-------|
-| Binary Size | ~1.7 MB |
+| Binary Size | ~12 MB |
 | Runtime RAM | ~40 MB |
 | Startup Time | < 1 second |
 | Dependencies | Zero |
