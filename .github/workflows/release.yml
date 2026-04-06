@@ -35,7 +35,7 @@ jobs:
       - name: Install build tools (Alpine)
         if: matrix.container == 'rust:alpine'
         run: |
-          apk add --no-cache musl-dev openssl-dev openssl-libs-static pkgconfig perl make
+          apk add --no-cache bash musl-dev openssl-dev openssl-libs-static pkgconfig perl make
 
       - name: Install build tools (Ubuntu/Debian)
         if: matrix.container != '' && matrix.container != 'rust:alpine'
