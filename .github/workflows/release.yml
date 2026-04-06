@@ -15,9 +15,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
+            target: x86_64-unknown-linux-musl
             name: tinyclaw-linux-x64
-            container: debian:buster-slim
+            container: rust:alpine
           - os: macos-latest
             target: aarch64-apple-darwin
             name: tinyclaw-macos-arm64
@@ -32,10 +32,15 @@ jobs:
     container: ${{ matrix.container || null }}
 
     steps:
-      - name: Install build tools (Debian)
-        if: matrix.container != ''
+      - name: Install build tools (Alpine)
+        if: matrix.container == 'rust:alpine'
         run: |
-          apt-get update && apt-get install -y gcc make curl perl pkg-config libssl-dev
+          apk add --no-cache musl-dev openssl-dev openssl-libs-static pkgconfig perl make
+
+      - name: Install build tools (Ubuntu/Debian)
+        if: matrix.container != '' && matrix.container != 'rust:alpine'
+        run: |
+          apt-get update && apt-get install -y gcc make curl perl pkg-config libssl-dev ca-certificates
 
       - name: Checkout code
         uses: actions/checkout@v4
