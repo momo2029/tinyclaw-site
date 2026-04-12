@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TinyClaw - 轻量级本地 AI 助手</title>
-    <meta name="description" content="用 Rust 构建的轻量级个人助手。运行在树莓派上。管理邮件、AI 对话、可扩展技能。仅 1.7MB，占用 30MB 内存。">
+    <title>TinyClaw - 本地优先的信息分诊台</title>
+    <meta name="description" content="TinyClaw 是用 Rust 构建的本地优先信息分诊台。统一处理邮件、新闻与 AI 对话，一个二进制文件即可运行。">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -643,10 +643,10 @@
 <section class="hero">
     <div class="hero-badge">
         <span class="dot"></span>
-        <span data-zh="v0.1.0 · 免费下载" data-en="v0.1.0 · Free Download">v0.1.0 · 免费下载</span>
+        <span data-zh="v0.2.0 · Today / 邮件 / 新闻" data-en="v0.2.0 · Today / Email / News">v0.2.0 · Today / 邮件 / 新闻</span>
     </div>
-    <h1 data-zh='你的 AI 助手<br><span class="gradient">一个二进制文件<br>零依赖，纯本地</span>' data-en='Your AI assistant<br><span class="gradient">One binary<br>Zero deps, pure local</span>'>你的 AI 助手<br><span class="gradient">一个二进制文件<br>零依赖，纯本地</span></h1>
-    <p data-zh="用 Rust 构建的轻量级个人助手。管理邮件、运行 AI 对话、通过技能扩展——全部本地运行，内存占用不到 50MB。" data-en="A lightweight personal assistant built with Rust. Manages email, runs AI chat, and extends with skills — all locally, in under 50MB of RAM.">用 Rust 构建的轻量级个人助手。管理邮件、运行 AI 对话、通过技能扩展——全部本地运行，内存占用不到 50MB。</p>
+    <h1 data-zh='你的本地信息分诊台<br><span class="gradient">先看 Today<br>再处理邮件和新闻</span>' data-en='Your local triage desk<br><span class="gradient">Start from Today<br>then handle email and news</span>'>你的本地信息分诊台<br><span class="gradient">先看 Today<br>再处理邮件和新闻</span></h1>
+    <p data-zh="TinyClaw 用 Rust 构建，把邮件、新闻和 AI 对话收进一个本地优先的工作台。打开首页，先知道今天什么最重要，再决定下一步。" data-en="TinyClaw is a Rust-built local-first triage desk for email, news, and AI chat. Open Today, see what matters now, then decide the next step.">TinyClaw 用 Rust 构建，把邮件、新闻和 AI 对话收进一个本地优先的工作台。打开首页，先知道今天什么最重要，再决定下一步。</p>
     <div class="hero-actions">
         <a href="https://github.com/momo2029/tinyclaw-site/releases" class="btn btn-primary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -681,19 +681,24 @@
 <section id="features">
     <div class="container">
         <div class="section-label" data-zh="功能" data-en="Features">功能</div>
-        <h2 class="section-title" data-zh="你需要的一切。<br>多余的一个没有。" data-en="Everything you need.<br>Nothing you don't.">你需要的一切。<br>多余的一个没有。</h2>
-        <p class="section-desc" data-zh="TinyClaw 仅靠一个二进制文件运行。无需 Docker、Kubernetes 或云端依赖。启动即用。" data-en="TinyClaw runs on a single binary. No Docker, no Kubernetes, no cloud dependency. Just start it and go.">TinyClaw 仅靠一个二进制文件运行。无需 Docker、Kubernetes 或云端依赖。启动即用。</p>
+        <h2 class="section-title" data-zh="从 Today 开始。<br>把重点先捞出来。" data-en="Start with Today.<br>Pull the signal first.">从 Today 开始。<br>把重点先捞出来。</h2>
+        <p class="section-desc" data-zh="TinyClaw 不是又一个聊天壳子，而是一个本地优先的信息分诊台。页面先读本地缓存，再把重点项送到邮件和新闻工作区。" data-en="TinyClaw is not just another chat shell. It is a local-first triage desk that reads from local cache first, then routes important items into email and news workspaces.">TinyClaw 不是又一个聊天壳子，而是一个本地优先的信息分诊台。页面先读本地缓存，再把重点项送到邮件和新闻工作区。</p>
 
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon fi-purple">✉️</div>
-                <h3 data-zh="多账户邮件管理" data-en="Multi-Account Email">多账户邮件管理</h3>
-                <p data-zh="连接无限个 IMAP 账户。通过 SMTP 读取、搜索和发送邮件。支持 Gmail、Outlook 及所有 IMAP 服务。" data-en="Connect unlimited IMAP accounts. Read, search, and send emails through SMTP. Works with Gmail, Outlook, and any IMAP provider.">连接无限个 IMAP 账户。通过 SMTP 读取、搜索和发送邮件。支持 Gmail、Outlook 及所有 IMAP 服务。</p>
+                <h3 data-zh="邮件工作区" data-en="Email Workspace">邮件工作区</h3>
+                <p data-zh="连接多个 IMAP 账户，缓存最近邮件，优先展示需要回复和需要跟进的内容。可直接查看正文，再把回复草稿交给 AI。" data-en="Connect multiple IMAP accounts, cache recent messages, and prioritize what needs a reply or follow-up. Read full content, then hand draft replies to AI.">连接多个 IMAP 账户，缓存最近邮件，优先展示需要回复和需要跟进的内容。可直接查看正文，再把回复草稿交给 AI。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-cyan">💬</div>
                 <h3 data-zh="AI 流式对话" data-en="AI Chat with Streaming">AI 流式对话</h3>
                 <p data-zh="支持多个 AI 提供商。流式响应、工具调用、随时切换模型。内置模型开箱即用，无需 API Key。" data-en="Chat with multiple AI providers. Streaming responses, tool invocation, and the ability to switch providers on the fly. Built-in model works out of the box — no API key required.">支持多个 AI 提供商。流式响应、工具调用、随时切换模型。内置模型开箱即用，无需 API Key。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon fi-orange">🧭</div>
+                <h3 data-zh="Today 首页" data-en="Today Briefing">Today 首页</h3>
+                <p data-zh="首页不是配置页，也不是聊天记录。TinyClaw 会把缓存里的邮件和新闻统一分诊，只展示最值得先处理的 10 条。" data-en="The homepage is not a settings screen or a chat log. TinyClaw triages cached email and news into one briefing and shows only the top items worth handling first.">首页不是配置页，也不是聊天记录。TinyClaw 会把缓存里的邮件和新闻统一分诊，只展示最值得先处理的 10 条。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-green">🔧</div>
@@ -707,13 +712,13 @@
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-pink">🌐</div>
-                <h3 data-zh="内置 Web 界面" data-en="Built-in Web UI">内置 Web 界面</h3>
-                <p data-zh="配置向导、仪表盘、聊天界面、技能管理和设置——全部由二进制文件自身提供。Alpine.js + Tailwind。" data-en="Setup wizard, dashboard, chat interface, skill management, and settings — all served by the binary itself. Alpine.js + Tailwind.">配置向导、仪表盘、聊天界面、技能管理和设置——全部由二进制文件自身提供。Alpine.js + Tailwind。</p>
+                <h3 data-zh="内置 Web 工作台" data-en="Built-in Web Workspace">内置 Web 工作台</h3>
+                <p data-zh="配置向导、Today、邮件页、新闻页、聊天界面和设置，全都由二进制文件自己提供。没有额外前端服务。" data-en="Setup wizard, Today, email page, news page, chat interface, and settings are all served directly by the binary. No extra frontend service.">配置向导、Today、邮件页、新闻页、聊天界面和设置，全都由二进制文件自己提供。没有额外前端服务。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-orange">📰</div>
-                <h3 data-zh="RSS 新闻阅读" data-en="RSS News Reader">RSS 新闻阅读</h3>
-                <p data-zh="订阅任意 RSS 源，自动抓取未读文章，AI 帮你摘要重点。已读文章本地去重，不会重复推送。" data-en="Subscribe to any RSS feed, auto-fetch unread articles, and let AI summarize the highlights. Read articles are deduplicated locally so you never see the same story twice.">订阅任意 RSS 源，自动抓取未读文章，AI 帮你摘要重点。已读文章本地去重，不会重复推送。</p>
+                <h3 data-zh="新闻工作区" data-en="News Workspace">新闻工作区</h3>
+                <p data-zh="订阅任意 RSS 源，抓取并缓存未读文章，按重要度排序后进入 Today 与新闻页。点开后可继续让 AI 深读和总结。" data-en="Subscribe to any RSS feed, cache unread stories, rank them by importance, and route them into Today and the news page. Open an item and let AI read deeper when needed.">订阅任意 RSS 源，抓取并缓存未读文章，按重要度排序后进入 Today 与新闻页。点开后可继续让 AI 深读和总结。</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon fi-purple">📦</div>
@@ -895,7 +900,7 @@
 <section class="cta">
     <div class="container">
         <h2 data-zh="准备好从小开始了？" data-en="Ready to go small?">准备好从小开始了？</h2>
-        <p data-zh="一个二进制文件。无需云端。无需订阅。你的助手，就在本地运行。" data-en="One binary. No cloud. No subscriptions. Just your assistant, running locally.">一个二进制文件。无需云端。无需订阅。你的助手，就在本地运行。</p>
+        <p data-zh="一个二进制文件。先看 Today，再处理邮件和新闻。没有云端依赖，只有你自己的本地工作流。" data-en="One binary. Start with Today, then handle email and news. No cloud dependency, just your own local workflow.">一个二进制文件。先看 Today，再处理邮件和新闻。没有云端依赖，只有你自己的本地工作流。</p>
         <div class="cta-actions">
             <a href="https://github.com/momo2029/tinyclaw-site/releases" class="btn btn-primary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
